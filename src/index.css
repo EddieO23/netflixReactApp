@@ -5,6 +5,11 @@
   --bg-custom-dark: #141414;
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  scrollbar-width: none; /* For Firefox */
+}
+
 body {
   background-color: #141414;
  color: white;

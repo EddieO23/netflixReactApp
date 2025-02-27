@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { tmdbApi } from "../tmdbApi";
 import { useMovieContext } from "../context/MovieContext";
 import Hero from "../components/Hero";
+import Carousel from "../components/Carousel";
 
 function Home() {
   const {
@@ -54,7 +55,7 @@ function Home() {
         const randomIndex = Math.floor(
           Math.random() * popularMoviesResult.data?.results.length,
         );
-        
+
         const randomMovie = popularMoviesResult.data?.results[randomIndex];
 
         setSelectedMovie(randomMovie);
@@ -81,7 +82,12 @@ function Home() {
     setTrendingMovies,
   ]);
 
-  return <div><Hero/></div>;
+  return (
+    <div>
+      <Hero />
+      <Carousel items={popularMovies} title="Popular"/>
+    </div>
+  );
 }
 
 export default Home;
