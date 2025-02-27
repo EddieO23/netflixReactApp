@@ -13,6 +13,8 @@ export const MovieProvider = ({ children }) => {
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trailerUrl,setTrailerUrl] = useState("")
+  const [isMuted, setIsMuted] = useState(true); // State to manage mute/unmute
+  const [loading, setLoading] = useState(true); // State to manage loading
 
   return (
     <MovieContext.Provider

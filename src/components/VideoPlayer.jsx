@@ -10,6 +10,9 @@ const VideoPlayer = ({ videoId,  isMuted, pip }) => {
   const [playing] = useState(true);
   const [volume, setVolume] = useState(0.8);
 
+// console.log(videoId);
+
+
   useEffect(() => {
     setVolume(mute ? 0 : 0.8);
   }, [mute]);
@@ -18,7 +21,7 @@ const VideoPlayer = ({ videoId,  isMuted, pip }) => {
       <ReactPlayer
         ref={playerRef}
         url={`https://www.youtube.com/embed/${videoId}`}
-        controls={location.pathname.startsWith("/watch")}
+        controls={false}
         muted={location.pathname.startsWith("/watch") ? mute : isMuted}
         playing={playing}
         volume={volume}
