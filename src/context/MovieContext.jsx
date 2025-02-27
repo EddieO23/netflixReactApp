@@ -12,6 +12,7 @@ export const MovieProvider = ({ children }) => {
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
+  const [trailerUrl,setTrailerUrl] = useState("")
 
   return (
     <MovieContext.Provider
@@ -24,6 +25,8 @@ export const MovieProvider = ({ children }) => {
         setTopRatedMovies,
         trendingMovies,
         setTrendingMovies,
+        trailerUrl,
+        setTrailerUrl
       }}
     >
       {children}

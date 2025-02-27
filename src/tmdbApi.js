@@ -51,8 +51,8 @@ export const tmdbApi = {
       params: { with_genres: genreId, page },
     }),
 
-  // getMovieTrailer: (movieId) =>
-  //   get(`/movie/${movieId}/videos`),
+  getMovieTrailer: (movieId) =>
+    get(`/movie/${movieId}/videos`),
 
   // getMovieDetails: (movieId) => get(`/movie/${movieId}`),
 

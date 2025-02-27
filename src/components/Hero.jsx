@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMovieContext } from "../context/MovieContext";
 import { InfoIcon, PlayIcon, Volume2Icon } from "lucide-react";
+import { tmdbApi } from "../tmdbApi";
+import VideoPlayer from "./VideoPlayer";
 
 function Hero() {
-  const { selectedMovie } = useMovieContext();
+  const { selectedMovie, trailerUrl, setTrailerUrl } = useMovieContext();
+
+  useEffect(() => {
+    const fetchTrailer = async () => {
+      if (selectedMovie) {
+        const trailerResponse = await tmdbApi.getMovieTrailer(selectedMovie.id);
+        if (trailerResponse.error) {
+          setTrailerUrl("");
+        } else if (trailerResponse.data) {
+          setTrailerUrl(trailerResponse.data.results[0].key);
+        }
+      }
+    };
+    fetchTrailer();
+  }, [selectedMovie]);
 
   return (
     <main className="bg-custom-dark relative overflow-hidden">
       {/* video player */}
-      {selectedMovie && (
+      {trailerUrl && <VideoPlayer videoId={trailerUrl}/>}
+       {selectedMovie && (
         <img
           src={`https://image.tmdb.org/t/p/original/${selectedMovie?.backdrop_path}`}
           alt="movie poster"
@@ -48,9 +65,9 @@ function Hero() {
               <button className="flex items-center rounded-full border-2 p-2 text-white transition-all">
                 <Volume2Icon size={20} />
               </button>
-                <div className="bg-opacity-600 text-white border-l-2 bg-gray-600 px-3 py-2">
-                  <span>18+</span>
-                </div>
+              <div className="bg-opacity-600 border-l-2 bg-gray-600 px-3 py-2 text-white">
+                <span>18+</span>
+              </div>
             </div>
           </div>
         </div>

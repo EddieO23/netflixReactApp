@@ -100,7 +100,7 @@ function Home() {
         {trendingMovies && <Carousel title="Trending Movies" items={trendingMovies} />}
         {topRatedMovies && <Carousel title="Top-Rated Movies" items={topRatedMovies} />}
         {genresWithMovies && genresWithMovies.map((movieList) => (
-          <Carousel title={`${movieList.name} Movies`} items={movieList.movies}/>
+          <Carousel key={movieList.id} title={`${movieList.name} Movies`} items={movieList.movies}/>
         ))}
       </div>
     </div>
