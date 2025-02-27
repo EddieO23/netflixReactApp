@@ -8,13 +8,16 @@ import NotFound from "./pages/NotFound";
 import { Link, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { MovieProvider } from "./context/MovieContext";
+import { CardProvider } from "./context/CardContext";
 
 function App() {
   return (
     <MovieProvider>
+      <CardProvider>
       <Router>
         <MainContent />
       </Router>
+      </CardProvider>
     </MovieProvider>
   );
 }
