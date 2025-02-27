@@ -40,7 +40,7 @@ export const tmdbApi = {
     return get(`/movie/popular`, { params: { page } });
   },
 
-  fetchTrendingMovies: (timeWindow) => get(`/trending/movie/${timeWindow}`),
+  fetchTrendingMovies: (timeWindow = "week") => get(`/trending/movie/${timeWindow}`),
 
   fetchTopRatedMovies: (page) => get(`/movie/top_rated`, {params: {page}}),
 
