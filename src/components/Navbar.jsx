@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import logo from '../assets/Netflix-LOGO.png';
 import profilePic from '../assets/profile.jpg';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,18 @@ function Navbar() {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSticky, setIsSticky] =useState(false)
+
+  useEffect(() => {
+const handleScroll = () => {
+  setIsSticky(window.scroll > 0 )
+}
+window.addEventListener('scroll', handleScroll)
+
+return () => {
+  window.removeEventListener('scroll', handleScroll)
+}
+  }, [])
 
   const mainInputRef = useRef(null);
   const mobileInputRef = useRef(null);
@@ -34,7 +46,7 @@ const closeMenu = () => {
 }
 
   return (
-    <header className='fixed top-0 left-0 right-0 z-50 flex flex-col px-5 md:px-10 transition-all duration-300 ease-in-out text-white'>
+    <header className={`fixed top-0 left-0 right-0 z-50 flex flex-col px-5 md:px-10 transition-all duration-300 ease-in-out text-white ${isSticky ? 'bg-black shadow-lg' : 'bg-gradient-to-b from-[rgba(0,0,0,0.7)] to-transparent'}`}>
       <div className='flex items-center justify-between py-4'>
         {/* logo */}
         <div className='flex gap-x-6 md:gap-x-8 items-center'>
