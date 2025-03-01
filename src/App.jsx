@@ -10,14 +10,17 @@ import Navbar from "./components/Navbar";
 import { MovieProvider } from "./context/MovieContext";
 import { CardProvider, useCardContext } from "./context/CardContext";
 import PopUpCard from "./components/PopUpCard";
+import { UtilsProvider } from "./context/UtilsContext";
 
 function App() {
   return (
     <MovieProvider>
       <CardProvider>
-        <Router>
-          <MainContent />
-        </Router>
+        <UtilsProvider>
+          <Router>
+            <MainContent />
+          </Router>
+        </UtilsProvider>
       </CardProvider>
     </MovieProvider>
   );
@@ -26,11 +29,15 @@ function App() {
 export default App;
 
 const MainContent = () => {
-  const {cardState} = useCardContext()
+  const { cardState } = useCardContext();
   return (
     <>
       <Navbar />
-      <PopUpCard isHovered={cardState.isHovered} x={cardState.position?.x || 0} y={cardState.position?.y || 0} />
+      <PopUpCard
+        isHovered={cardState.isHovered}
+        x={cardState.position?.x || 0}
+        y={cardState.position?.y || 0}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/watch" element={<Watch />} />

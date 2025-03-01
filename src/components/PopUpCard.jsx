@@ -7,18 +7,21 @@ import {
   Volume2,
   VolumeOff,
 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VideoPlayer from "./VideoPlayer";
 import { Link } from "react-router-dom";
 import { useCardContext } from "../context/CardContext";
+import { tmdbApi } from "../tmdbApi";
 
 function PopUpCard({ isHovered, x, y }) {
-  const { setCardState } = useCardContext();
+  const { cardState, setCardState } = useCardContext();
   const [title, setTitle] = useState("Movie Title");
   const [muted, setIsMuted] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState("");
   const [showTrailer, setShowTrailer] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [movieId, setMovieId] = useState(0);
+  const [favData, setFavData] = useState(null);
   const [addedToFavorite, setAddedToFavorite] = useState(false);
 
   const handlePopoverMouseLeave = (e) => {
@@ -58,6 +61,48 @@ function PopUpCard({ isHovered, x, y }) {
     },
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (cardState.isHovered) {
+        setCardState((prev) => ({
+          ...prev,
+          isHovered: false,
+        }));
+      }
+    };
+    document.addEventListener("scroll", handleScroll);
+    // Clean up function
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [cardState.isHovered, setCardState]);
+
+  useEffect(() => {
+    if (cardState.item) {
+      setImageUrl(
+        `https://image.tmdb.org/t/p/w500${cardState.item.backdrop_path}`,
+      );
+
+      setTitle(cardState.item.title || "MOVIE");
+      setMovieId(cardState.item.id);
+      setFavData(cardState.item);
+
+      // Check if added to list
+      const fetchTrailer = async () => {
+        const trailerResponse = await tmdbApi.getMovieTrailer(
+          cardState.item.id,
+        );
+        if (trailerResponse.error) {
+          setTrailerUrl("");
+        } else if (trailerResponse.data) {
+          setTrailerUrl(trailerResponse.data.results[0].key);
+        }
+      };
+
+      fetchTrailer(); // Call fetchTrailer once here
+    }
+  }, [cardState.item]); // Add cardState.item as a dependency
+
   // Adjust the positioning logic
   const adjustedX = Math.min(Math.max(x, 0), window.innerWidth - 350); // Ensure it stays within the viewport
   const adjustedY = y + 270; // Position it below the mouse
@@ -88,7 +133,7 @@ function PopUpCard({ isHovered, x, y }) {
             {title.length > 25 ? title.slice(0, 25) + "..." : title}
           </p>
           <span
-            onClick={() => setIsMuted(!muted)}
+            onClick={()=>{setIsMuted(!muted)}}
             className="absolute top-36 right-4 z-50 cursor-pointer rounded-full border-2 border-t-gray-700 p-3 transition-colors duration-200 hover:border-white"
           >
             {muted ? <VolumeOff size={20} /> : <Volume2 size={20} />}
