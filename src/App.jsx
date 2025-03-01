@@ -8,7 +8,7 @@ import NotFound from "./pages/NotFound";
 import { Link, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { MovieProvider } from "./context/MovieContext";
-import { CardProvider } from "./context/CardContext";
+import { CardProvider, useCardContext } from "./context/CardContext";
 import PopUpCard from "./components/PopUpCard";
 
 function App() {
@@ -26,10 +26,11 @@ function App() {
 export default App;
 
 const MainContent = () => {
+  const {cardState} = useCardContext()
   return (
     <>
       <Navbar />
-      <PopUpCard isHovered={true} x={200} y={0} />
+      <PopUpCard isHovered={cardState.isHovered} x={cardState.position?.x || 0} y={cardState.position?.y || 0} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/watch" element={<Watch />} />
