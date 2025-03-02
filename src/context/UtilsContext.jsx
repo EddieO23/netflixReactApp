@@ -15,6 +15,7 @@ export const UtilsProvider = ({ children }) => {
     if (list) {
       try {
         const parsedList = JSON.parse(list);
+        setMovieList(parsedList)
         const exists = parsedList.some((item) => item.id === movie.id);
         if (exists) {
           const newMovieList = parsedList.filter(
@@ -22,6 +23,7 @@ export const UtilsProvider = ({ children }) => {
           );
           setMovieList(newMovieList);
           localStorage.setItem("movieList", JSON.stringify(newMovieList));
+          return;
         }
       } catch (error) {
         localStorage.removeItem("movieList");
