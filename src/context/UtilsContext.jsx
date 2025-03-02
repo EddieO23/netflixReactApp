@@ -15,6 +15,7 @@ export const UtilsProvider = ({ children }) => {
     if (list) {
       try {
         const parsedList = JSON.parse(list);
+        setMovieList(parsedList)
         const exists = parsedList.some((item) => item.id === movie.id);
         if (exists) {
           const newMovieList = parsedList.filter(
@@ -22,6 +23,7 @@ export const UtilsProvider = ({ children }) => {
           );
           setMovieList(newMovieList);
           localStorage.setItem("movieList", JSON.stringify(newMovieList));
+          return;
         }
       } catch (error) {
         localStorage.removeItem("movieList");
@@ -39,8 +41,17 @@ export const UtilsProvider = ({ children }) => {
     }
   };
 
+const randomDuration = () => {
+  const randomMins = Math.floor(Math.random() * (200 - 60 + 1)) + 60
+  const hrs = Math.floor(randomMins / 60)
+  const mins = randomMins % 60
+
+  return `${hrs}h ${mins}m`
+
+}
+
   return (
-    <UtilsContext.Provider value={{ addToFavoriteList, movieList }}>
+    <UtilsContext.Provider value={{ addToFavoriteList, movieList, randomDuration }}>
       {children}
     </UtilsContext.Provider>
   );

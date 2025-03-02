@@ -12,9 +12,13 @@ import VideoPlayer from "./VideoPlayer";
 import { Link } from "react-router-dom";
 import { useCardContext } from "../context/CardContext";
 import { tmdbApi } from "../tmdbApi";
+import {useUtilsContext} from '../context/UtilsContext'
+import { useMovieContext } from "../context/MovieContext";
 
 function PopUpCard({ isHovered, x, y }) {
+  const {setModalOpen, setSelectedMovie} = useMovieContext()
   const { cardState, setCardState } = useCardContext();
+  const {addToFavoriteList} = useUtilsContext()
   const [title, setTitle] = useState("Movie Title");
   const [muted, setIsMuted] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState("");
@@ -88,6 +92,10 @@ function PopUpCard({ isHovered, x, y }) {
       setFavData(cardState.item);
 
       // Check if added to list
+
+      let list = JSON.parse(localStorage.getItem("movieList") || "[]")
+      setAddedToFavorite(list.some((item) => item.id === cardState.item.id))
+
       const fetchTrailer = async () => {
         const trailerResponse = await tmdbApi.getMovieTrailer(
           cardState.item.id,
@@ -167,7 +175,10 @@ function PopUpCard({ isHovered, x, y }) {
 
           <button
             className="rounded-full border-2 border-gray-700 p-3 transition-colors duration-200 hover:border-white"
-            onClick={() => setAddedToFavorite(!addedToFavorite)}
+            onClick={() =>{
+              addToFavoriteList(favData)
+              setAddedToFavorite(!addedToFavorite)
+            }}
           >
             {addedToFavorite ? (
               <Check size={20} className="h-6 w-6" />
@@ -181,7 +192,16 @@ function PopUpCard({ isHovered, x, y }) {
         </div>
         <button
           className="rounded-full border-2 border-gray-700 p-3 transition-colors duration-200 hover:border-white"
-          onClick={() => {}}
+          onClick={() => {
+              setModalOpen(true)
+              setSelectedMovie(favData)
+              setCardState((prev)=>({
+                ...prev,
+                isHovered: false,
+                cardId: null,
+                item: null
+              }))
+          }}
         >
           <ChevronDown size={20} className="h-6 w-6" />
         </button>

@@ -7,10 +7,11 @@ import NotFound from "./pages/NotFound";
 
 import { Link, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import { MovieProvider } from "./context/MovieContext";
+import { MovieProvider, useMovieContext } from "./context/MovieContext";
 import { CardProvider, useCardContext } from "./context/CardContext";
 import PopUpCard from "./components/PopUpCard";
 import { UtilsProvider } from "./context/UtilsContext";
+import Modal from "./components/Modal";
 
 function App() {
   return (
@@ -30,6 +31,9 @@ export default App;
 
 const MainContent = () => {
   const { cardState } = useCardContext();
+  const {selectedMovie, modalOpen, setModalOpen} = useMovieContext()
+  const closeModal = () => setModalOpen(false)
+
   return (
     <>
       <Navbar />
@@ -38,6 +42,7 @@ const MainContent = () => {
         x={cardState.position?.x || 0}
         y={cardState.position?.y || 0}
       />
+      {selectedMovie && <Modal isOpen={modalOpen} onClose={closeModal} movieData={selectedMovie}/>}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/watch" element={<Watch />} />
