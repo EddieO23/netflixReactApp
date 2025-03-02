@@ -41,8 +41,17 @@ export const UtilsProvider = ({ children }) => {
     }
   };
 
+const randomDuration = () => {
+  const randomMins = Math.floor(Math.random() * (200 - 60 + 1)) + 60
+  const hrs = Math.floor(randomMins / 60)
+  const mins = randomMins % 60
+
+  return `${hrs}h ${mins}m`
+
+}
+
   return (
-    <UtilsContext.Provider value={{ addToFavoriteList, movieList }}>
+    <UtilsContext.Provider value={{ addToFavoriteList, movieList, randomDuration }}>
       {children}
     </UtilsContext.Provider>
   );
