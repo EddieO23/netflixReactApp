@@ -40,7 +40,7 @@ const MainContent = () => {
         x={cardState.position?.x || 0}
         y={cardState.position?.y || 0}
       />
-      {selectedMovie && <Modal isOpen={true} onClose={()=>{}} videoId="alskdjf" movieData={selectedMovie}/>}
+      {selectedMovie && <Modal isOpen={true} onClose={()=>{}} movieData={selectedMovie}/>}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/watch" element={<Watch />} />

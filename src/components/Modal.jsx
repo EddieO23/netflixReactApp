@@ -2,10 +2,12 @@ import { Check, Play, Plus, ThumbsUp, Volume2, VolumeOff, X } from 'lucide-react
 import React from 'react'
 import { useState } from 'react'
 import { useUtilsContext } from '../context/UtilsContext'
+import VideoPlayer from './VideoPlayer'
 
-function Modal({isOpen, onClose, movieData, videoId="sadsass"}) {
+function Modal({isOpen, onClose, movieData}) {
   const {addToFavoriteList} = useUtilsContext()
   const [muted, setMuted] = useState(true)
+  const [videoId, setVideoId] = useState("sVIUkLhSDuM")
   const [addedToFavorite, setAddedToFavorite] = useState(false)
 
   if(!isOpen) {
@@ -20,7 +22,7 @@ function Modal({isOpen, onClose, movieData, videoId="sadsass"}) {
 </button>
 
 {videoId ? (
-  <div className="relative h-full">
+  <div className="relative h-96">
     <div className="absolute inset-0 z-20 bottom-0 bg-gradient-to-t from-[#141414] to-transparent"></div>
     <div className="absolute z-50 left-6 md:left-12 bottom-2 w-[90%]">
       <p className='text-4xl font-bold mb-4'>{movieData.title}</p>
@@ -59,11 +61,30 @@ function Modal({isOpen, onClose, movieData, videoId="sadsass"}) {
         </div>
 
       </div>
+
+
     </div>
+<div className="pointer-events-auto overflow-hidden">
+<VideoPlayer videoId={videoId} isMuted={muted } />
+</div>
   </div>
 ): (
-  <>test</>
+  <div className="p-6 md:p-12 relative">
+    <p>Video Not Available...</p>
+  </div>
 )}
+<div className="p-6 md:p-12 relative">
+   <div className='absolute inset-0 h-[20px] bottom-0 bg-gradient-to-t from-[#141414] to-transparent'>
+   </div>
+
+   <div className="flex flex-col md:flex-row">
+    <div className="w-[100%] md:w-[60%] pr-8">
+      <div className="flex items-center gap-4 mb-4">
+        <span className='text-green-400'>{movieData.vote_average ? ${(movieData.vote_average * 10)}}</span>
+      </div>
+    </div>
+   </div>
+</div>
       </div>
     </div>
   )
