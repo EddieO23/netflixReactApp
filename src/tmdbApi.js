@@ -54,12 +54,12 @@ export const tmdbApi = {
   getMovieTrailer: (movieId) =>
     get(`/movie/${movieId}/videos`),
 
-  // getMovieDetails: (movieId) => get(`/movie/${movieId}`),
+  getMovieDetails: (movieId) => get(`/movie/${movieId}`),
 
-  // getSimilarMovies: (movieId) =>
-  //   get(`/movie/${movieId}/similar`, {
-  //     params: { page: 1 },
-  //   }),
+  getSimilarMovies: (movieId) =>
+    get(`/movie/${movieId}/similar`, {
+      params: { page: 1 },
+    }),
 
   // searchMovies: (keyword, page = 1) =>
   //   get(`/search/movie`, {

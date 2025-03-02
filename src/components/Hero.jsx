@@ -5,7 +5,7 @@ import { tmdbApi } from "../tmdbApi";
 import VideoPlayer from "./VideoPlayer";
 
 function Hero() {
-  const { selectedMovie, trailerUrl, setTrailerUrl } = useMovieContext();
+  const { selectedMovie, trailerUrl, setTrailerUrl, setModalOpen } = useMovieContext();
   const [isMuted, setIsMuted] = useState(true); // State to manage mute/unmute
   const [loading, setLoading] = useState(true); // State to manage loading
 
@@ -67,7 +67,7 @@ function Hero() {
                 <PlayIcon size={20} />
                 <span className="font-semibold">Play</span>
               </button>
-              <button className="flex items-center gap-2 rounded-md bg-gray-700 px-4 py-2 text-white transition-all hover:bg-gray-600">
+              <button onClick={()=>{setModalOpen(true)}} className="flex items-center gap-2 rounded-md bg-gray-700 px-4 py-2 text-white transition-all hover:bg-gray-600">
                 <InfoIcon size={20} />
                 <span className="hidden font-semibold md:block">Info</span>
               </button>

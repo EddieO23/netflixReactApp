@@ -31,7 +31,9 @@ export default App;
 
 const MainContent = () => {
   const { cardState } = useCardContext();
-  const {selectedMovie} = useMovieContext()
+  const {selectedMovie, modalOpen, setModalOpen} = useMovieContext()
+  const closeModal = () => setModalOpen(false)
+
   return (
     <>
       <Navbar />
@@ -40,7 +42,7 @@ const MainContent = () => {
         x={cardState.position?.x || 0}
         y={cardState.position?.y || 0}
       />
-      {selectedMovie && <Modal isOpen={true} onClose={()=>{}} movieData={selectedMovie}/>}
+      {selectedMovie && <Modal isOpen={modalOpen} onClose={closeModal} movieData={selectedMovie}/>}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/watch" element={<Watch />} />

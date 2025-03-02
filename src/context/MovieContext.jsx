@@ -15,6 +15,7 @@ export const MovieProvider = ({ children }) => {
   const [trailerUrl,setTrailerUrl] = useState("")
   const [isMuted, setIsMuted] = useState(true); // State to manage mute/unmute
   const [loading, setLoading] = useState(true); // State to manage loading
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <MovieContext.Provider
@@ -28,7 +29,9 @@ export const MovieProvider = ({ children }) => {
         trendingMovies,
         setTrendingMovies,
         trailerUrl,
-        setTrailerUrl
+        setTrailerUrl,
+        modalOpen,
+        setModalOpen
       }}
     >
       {children}

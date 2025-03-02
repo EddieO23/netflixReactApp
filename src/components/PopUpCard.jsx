@@ -13,8 +13,10 @@ import { Link } from "react-router-dom";
 import { useCardContext } from "../context/CardContext";
 import { tmdbApi } from "../tmdbApi";
 import {useUtilsContext} from '../context/UtilsContext'
+import { useMovieContext } from "../context/MovieContext";
 
 function PopUpCard({ isHovered, x, y }) {
+  const {setModalOpen, setSelectedMovie} = useMovieContext()
   const { cardState, setCardState } = useCardContext();
   const {addToFavoriteList} = useUtilsContext()
   const [title, setTitle] = useState("Movie Title");
@@ -190,7 +192,16 @@ function PopUpCard({ isHovered, x, y }) {
         </div>
         <button
           className="rounded-full border-2 border-gray-700 p-3 transition-colors duration-200 hover:border-white"
-          onClick={() => {}}
+          onClick={() => {
+              setModalOpen(true)
+              setSelectedMovie(favData)
+              setCardState((prev)=>({
+                ...prev,
+                isHovered: false,
+                cardId: null,
+                item: null
+              }))
+          }}
         >
           <ChevronDown size={20} className="h-6 w-6" />
         </button>

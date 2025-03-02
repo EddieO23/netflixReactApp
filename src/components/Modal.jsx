@@ -1,93 +1,189 @@
-import { Check, Play, Plus, ThumbsUp, Volume2, VolumeOff, X } from 'lucide-react'
-import React from 'react'
-import { useState } from 'react'
-import { useUtilsContext } from '../context/UtilsContext'
-import VideoPlayer from './VideoPlayer'
+import {
+  Check,
+  Play,
+  Plus,
+  ThumbsUp,
+  Volume2,
+  VolumeOff,
+  X,
+} from "lucide-react";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useUtilsContext } from "../context/UtilsContext";
+import VideoPlayer from "./VideoPlayer";
+import { tmdbApi } from "../tmdbApi";
 
-function Modal({isOpen, onClose, movieData}) {
-  const {addToFavoriteList} = useUtilsContext()
-  const [muted, setMuted] = useState(true)
-  const [videoId, setVideoId] = useState("sVIUkLhSDuM")
-  const [addedToFavorite, setAddedToFavorite] = useState(false)
+function Modal({ isOpen, onClose, movieData }) {
+  const { addToFavoriteList } = useUtilsContext();
+  const [muted, setMuted] = useState(true);
+  const [videoId, setVideoId] = useState("");
+  const [addedToFavorite, setAddedToFavorite] = useState(false);
+  const [movieDetails, setMovieDetails] = useState(null);
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [loadingSimilarMovies, setLoadingSimilarMovies] = useState(false);
 
-  if(!isOpen) {
-    return null
+  useEffect(() => {
+    setLoadingSimilarMovies(true);
+    let list = JSON.parse(localStorage.getItem("movieList") || "[]");
+
+    setAddedToFavorite(list.some((item) => item.id === movieData.id));
+
+    const fetchData = async () => {
+      const [trailerResponse, movieDetailsResponse, similarMovieResponse] =
+        await Promise.all([
+          tmdbApi.getMovieTrailer(movieData.id),
+          tmdbApi.getMovieDetails(movieData.id),
+          tmdbApi.getSimilarMovies(movieData.id),
+        ]);
+      setLoadingSimilarMovies(false);
+
+      if (trailerResponse.error) {
+        setVideoId("");
+      } else if (trailerResponse.data) {
+        setVideoId(trailerResponse.data.results[0].key);
+      }
+
+      if (movieDetailsResponse.error) {
+        setMovieDetails(null);
+      } else if (movieDetailsResponse.data) {
+        setMovieDetails(movieDetailsResponse.data);
+      }
+
+      if (similarMovieResponse.error) {
+        setSimilarMovies([]);
+      } else if (similarMovieResponse.data) {
+        setSimilarMovies(similarMovieResponse.data.results);
+        console.log(similarMovieResponse.data.results);
+      }
+    };
+
+    fetchData();
+  }, [isOpen]);
+
+  if (!isOpen) {
+    return null;
   }
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-      <div className="h-[90vh] overflow-x-hidden w-[85%] md:w-[80%] lg:w-[50%] bg-[#141414] text-white rounded-lg relative" onClick={()=>{}}>
-<button className='absolute z-50 top-4 right-6 text-white bg-black px-3 rounded-full' onClick={onClose}>
-  <X size={20}/>
-</button>
+    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
+      <div
+        className="relative h-[90vh] w-[85%] overflow-x-hidden rounded-lg bg-[#141414] text-white md:w-[80%] lg:w-[50%]"
+        onClick={() => {}}
+      >
+        <button
+          className="absolute top-4 right-6 z-50 rounded-full bg-black px-3 text-white hover:cursor-pointer"
+          onClick={onClose}
+        >
+          <X size={20} />
+        </button>
 
-{videoId ? (
-  <div className="relative h-96">
-    <div className="absolute inset-0 z-20 bottom-0 bg-gradient-to-t from-[#141414] to-transparent"></div>
-    <div className="absolute z-50 left-6 md:left-12 bottom-2 w-[90%]">
-      <p className='text-4xl font-bold mb-4'>{movieData.title}</p>
+        {videoId ? (
+          <div className="relative h-96">
+            <div className="absolute inset-0 bottom-0 z-20 bg-gradient-to-t from-[#141414] to-transparent"></div>
+            <div className="absolute bottom-2 left-6 z-50 w-[90%] md:left-12">
+              <p className="mb-4 text-4xl font-bold">{movieData.title}</p>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <button
+                    className="hove:bg-gray-200 flex items-center gap-2 rounded-md bg-white p-2 px-4 py-2 text-2xl text-black transition-all md:px-12"
+                    onClick={() => {}}
+                  >
+                    <Play size={20} />
+                    <span className="hidden font-semibold lg:block">Play</span>
+                  </button>
+                  <button
+                    className="rounded-full border-2 border-gray-700 p-2 transition hover:border-white md:p-4"
+                    onClick={() => {
+                      addToFavoriteList(movieData);
+                      setAddedToFavorite(!addedToFavorite);
+                    }}
+                  >
+                    {addedToFavorite ? (
+                      <Check className="h-6 w-6 text-white" />
+                    ) : (
+                      <Plus className="h-6 w-6 text-white" />
+                    )}
+                  </button>
 
-<button className='flex text-2xl items-center gap-2 bg-white text-black p-2 px-4 md:px-12 py-2 rounded-md hove:bg-gray-200 transition-all' onClick={()=>{}}>
-  <Play size={20}/>
-  <span className='font-semibold lg:block hidden'>Play</span>
-</button>
-<button className='rounded-full p-2 md:p-4 border-2 border-gray-700 hover:border-white transition' onClick={() => {
-  addToFavoriteList(movieData);
-  setAddedToFavorite(!addedToFavorite);
-}}>
+                  <button className="rounded-full border-2 border-gray-700 p-2 transition hover:border-white md:p-4">
+                    <ThumbsUp className="h-6 w-6 text-white" />
+                  </button>
+                </div>
 
-{
-  addedToFavorite ? (
-    <Check className='text-white h-6 w-6 '/>
-  ) : (
-    <Plus className='text-white h-6 w-6'/> 
-  )
-}
-</button>
+                <div className="pr-2">
+                  <button
+                    onClick={() => {
+                      setMuted(!muted);
+                    }}
+                    className="rounded-full border-2 border-gray-700 p-2 transition hover:border-white md:p-4"
+                  >
+                    {muted ? <VolumeOff /> : <Volume2 />}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="pointer-events-auto overflow-hidden">
+              <VideoPlayer videoId={videoId} isMuted={muted} />
+            </div>
+          </div>
+        ) : (
+          <div className="relative p-6 md:p-12">
+            <p>Video Not Available...</p>
+          </div>
+        )}
+        <div className="relative p-6 md:p-12">
+          <div className="absolute inset-0 bottom-0 h-[20px] bg-gradient-to-t from-[#141414] to-transparent"></div>
 
-<button className='rounded-full p-2 md:p-4 border-2 border-gray-700 hover:border-white transition'>
-  <ThumbsUp className='text-white h-6 w-6'/>
-</button>
-
+          <div className="flex flex-col md:flex-row">
+            <div className="w-[100%] pr-8 md:w-[60%]">
+              <div className="mb-4 flex items-center gap-4">
+                <span className="text-green-400">
+                  {movieDetails?.vote_average
+                    ? `${(movieDetails?.vote_average * 10).toFixed(0)}% Match`
+                    : "N/A"}
+                </span>
+                <span className="rounded-sm border border-gray-600 px-2">
+                  {movieDetails?.adult ? "18+" : "13+"}
+                </span>
+                <span className="font-bold">
+                  {movieDetails?.runtime
+                    ? `${movieDetails?.runtime} min`
+                    : "2hrs 14min"}
+                </span>
+                <span className="rounded-sm border border-gray-600 px-2">
+                  4K
+                </span>
+              </div>
+              <p>{movieDetails?.overview || "No overview is available"}</p>
+            </div>
+            <div className="mt-4 flex flex-1 flex-col">
+              <p>
+                <strong>Genres: &nbsp;</strong>
+                {movieDetails?.genres?.map((genre) => genre.name).join(",") ||
+                  "N/A"}
+              </p>
+              <p>
+                <strong>Languages &nbsp;</strong>
+                {movieDetails?.spoken_languages
+                  ?.map((lang) => lang.name)
+                  .join(", ") || "N/A"}
+              </p>
+            </div>
+          </div>
+          {loadingSimilarMovies && (<p className="mt-4 text-center">Loading Similiar Movies...</p>)}
+          {
+            similarMovies.length == 0 && !loadingSimilarMovies && (<p className="mt-4 text-center">Couldn't find similar movies :(</p>) 
+          }
+          {
+            similarMovies.length> 0 && !loadingSimilarMovies && (
+              <div className="">Show the cards</div>
+            )
+          }
         </div>
-
-        <div className="pr-2">
-          <button onClick={()=>{setMuted(!muted)}} className='rounded-full p-2 md:p-4 border-2 border-gray-700 hover:border-white transition'>
-            {muted ? <VolumeOff /> : <Volume2/>}
-          </button>
-        </div>
-
-      </div>
-
-
-    </div>
-<div className="pointer-events-auto overflow-hidden">
-<VideoPlayer videoId={videoId} isMuted={muted } />
-</div>
-  </div>
-): (
-  <div className="p-6 md:p-12 relative">
-    <p>Video Not Available...</p>
-  </div>
-)}
-<div className="p-6 md:p-12 relative">
-   <div className='absolute inset-0 h-[20px] bottom-0 bg-gradient-to-t from-[#141414] to-transparent'>
-   </div>
-
-   <div className="flex flex-col md:flex-row">
-    <div className="w-[100%] md:w-[60%] pr-8">
-      <div className="flex items-center gap-4 mb-4">
-        <span className='text-green-400'>{movieData.vote_average ? ${(movieData.vote_average * 10)}}</span>
       </div>
     </div>
-   </div>
-</div>
-      </div>
-    </div>
-  )
+  );
 }
 
-export default Modal
+export default Modal;
