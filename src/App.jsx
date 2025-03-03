@@ -45,7 +45,7 @@ const MainContent = () => {
       {selectedMovie && <Modal isOpen={modalOpen} onClose={closeModal} movieData={selectedMovie}/>}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/watch" element={<Watch />} />
+        <Route path="/watch/:id" element={<Watch />} />
         <Route path="/myList" element={<MyList />} />
         <Route path="/search" element={<Search />} />
         <Route path="*" element={<NotFound />} />
