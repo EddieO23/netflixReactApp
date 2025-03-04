@@ -17,12 +17,22 @@ export const UtilsProvider = ({ children }) => {
         const parsedList = JSON.parse(list);
         setMovieList(parsedList)
         const exists = parsedList.some((item) => item.id === movie.id);
+
+
         if (exists) {
           const newMovieList = parsedList.filter(
             (item) => item.id !== movie.id,
           );
+        
           setMovieList(newMovieList);
+        
           localStorage.setItem("movieList", JSON.stringify(newMovieList));
+          setCardState((prev) => ({
+            ...prev,
+            isHovered: false,
+            item: null,
+            cardId: null
+          }))
           return;
         }
       } catch (error) {
