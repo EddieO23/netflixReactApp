@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const BASE_URL = "https://api.themoviedb.org/3/";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -18,7 +19,7 @@ const get = async (url, config) => {
     const status = error?.response?.status;
     const details = error?.response?.data;
     // Uncomment the toast notification for user feedback
-    // toast.error("Something went wrong!!! Try again later", { id: "toast" });
+    toast.error("Something went wrong!!! Try again later", { id: "toast" });
     return {
       error: {
         message: `Failed to get the data from ${url}`,

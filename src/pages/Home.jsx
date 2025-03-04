@@ -3,6 +3,7 @@ import { tmdbApi } from "../tmdbApi";
 import { useMovieContext } from "../context/MovieContext";
 import Hero from "../components/Hero";
 import Carousel from "../components/Carousel";
+import toast from "react-hot-toast";
 
 function Home() {
   const {
@@ -69,7 +70,7 @@ function Home() {
             setPopularMovies(popularMoviesResult.data.results);
           }
         }
-        if (topRatedMoviesResult.error) {
+        if (topRatedMoviesResult.error) { 
           if (isMounted) setTopRatedMovies([]);
         } else if (topRatedMoviesResult.data) {
           if (isMounted) setTopRatedMovies(topRatedMoviesResult.data.results);

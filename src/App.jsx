@@ -12,6 +12,7 @@ import { CardProvider, useCardContext } from "./context/CardContext";
 import PopUpCard from "./components/PopUpCard";
 import { UtilsProvider } from "./context/UtilsContext";
 import Modal from "./components/Modal";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ const MainContent = () => {
 
   return (
     <>
+    <Toaster position="top-right"/>
       <Navbar />
       <PopUpCard
         isHovered={cardState.isHovered}
