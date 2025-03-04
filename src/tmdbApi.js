@@ -61,9 +61,9 @@ export const tmdbApi = {
       params: { page: 1 },
     }),
 
-  // searchMovies: (keyword, page = 1) =>
-  //   get(`/search/movie`, {
-  //     params: { query: keyword, page },
-  //   }),
+  searchMovies: (keyword, page = 1) =>
+    get(`/search/movie`, {
+      params: { query: keyword, page },
+    }),
 
 };

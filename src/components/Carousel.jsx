@@ -71,7 +71,7 @@ function Carousel({ items, title }) {
           </button>
         )}
         <div className="scroll-snap-mandatory no-scrollbar flex overflow-x-auto" ref={carouselContainer} onScroll={handleScroll}>
-          {items.map((item) => (
+          {items.filter((item) => item.backdrop_path).map((item) => (
             <div className="scroll-snap-center flex-none mr-4" key={item.id}>
               <Card item={item} />
             </div>

@@ -47,7 +47,7 @@ const MainContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/watch/:id" element={<Watch />} />
         <Route path="/myList" element={<MyList />} />
-        <Route path="/search" element={<Search />} />
+        <Route path="/search/:query" element={<Search />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

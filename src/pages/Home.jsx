@@ -6,7 +6,6 @@ import Carousel from "../components/Carousel";
 
 function Home() {
   const {
-    selectedMovie,
     setSelectedMovie,
     popularMovies,
     setPopularMovies,
