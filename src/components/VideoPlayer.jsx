@@ -15,7 +15,7 @@ const VideoPlayer = ({ videoId, isMuted }) => {
   }, [isMuted]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}> {/* Ensure height is set */}
+    <div className="absolute h-full w-full"> {/* Ensure height is set */}
       <ReactPlayer
         ref={playerRef}
         url={`https://www.youtube.com/embed/${videoId}`}
