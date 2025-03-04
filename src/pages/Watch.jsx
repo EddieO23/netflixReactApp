@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
+import NotFound from './NotFound';
 
 function Watch() {
   const { id } = useParams();
@@ -10,7 +11,7 @@ function Watch() {
   }
 
   if (id === '404 Not Found') {
-    return <div>404 Not Found</div>;
+return <NotFound/>
   }
 
   return (

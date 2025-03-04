@@ -8,11 +8,16 @@ function SimilarMoviesCard({ id, title, description, imageUrl, duration }) {
   const { setModalOpen } = useMovieContext();
   const navigate = useNavigate();
   const [imageSrc] = useState(imageUrl);
+
   const handlePlay = async () => {
+    
     const trailerRes = await tmdbApi.getMovieTrailer(parseInt(id));
+
     if (trailerRes.error) {
+      
       navigate(`/watch/404-not-found`);
       setModalOpen(false);
+      
     } else if (trailerRes.data) {
       navigate(`/watch/${trailerRes.data.results[0].key}`);
       setModalOpen(false);
