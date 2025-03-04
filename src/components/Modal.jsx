@@ -4,9 +4,16 @@ import { useUtilsContext } from "../context/UtilsContext";
 import VideoPlayer from "./VideoPlayer";
 import { tmdbApi } from "../tmdbApi";
 import SimilarMoviesCard from "./SimilarMoviesCard";
-import {Check,Play,Plus,ThumbsUp,Volume2,VolumeOff,X,} from "lucide-react";
+import {
+  Check,
+  Play,
+  Plus,
+  ThumbsUp,
+  Volume2,
+  VolumeOff,
+  X,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 
 function Modal({ isOpen, onClose, movieData }) {
   const { addToFavoriteList, randomDuration } = useUtilsContext();
@@ -17,7 +24,7 @@ function Modal({ isOpen, onClose, movieData }) {
   const [similarMovies, setSimilarMovies] = useState([]);
   const [loadingSimilarMovies, setLoadingSimilarMovies] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoadingSimilarMovies(true);
@@ -85,8 +92,8 @@ function Modal({ isOpen, onClose, movieData }) {
                   <button
                     className="hove:bg-gray-200 flex items-center gap-2 rounded-md bg-white p-2 px-4 py-2 text-2xl text-black transition-all md:px-12"
                     onClick={() => {
-navigate(`/watch/${movieData.id}`)
-onClose()
+                      navigate(`/watch/${videoId}`);
+                      onClose();
                     }}
                   >
                     <Play size={20} />
@@ -171,22 +178,32 @@ onClose()
               </p>
             </div>
           </div>
-          {loadingSimilarMovies && (<p className="mt-4 text-center">Loading Similiar Movies...</p>)}
-          {
-            similarMovies.length == 0 && !loadingSimilarMovies && (<p className="mt-4 text-center">Couldn't find similar movies :(</p>) 
-          }
-          {
-            similarMovies.length> 0 && !loadingSimilarMovies && (
-              <div className="mt-4">
-                <h3 className="text-xl font-bold mb-4">More like this:</h3>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 ">
-{similarMovies.filter(item => item.backdrop_path).slice(0,12).map((movie) => (
-  <SimilarMoviesCard key={movie.id} id={movie.id} duration={randomDuration()} title={movie.title} description={movie.overview} imageUrl={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`} />
-))}
-                </div>
+          {loadingSimilarMovies && (
+            <p className="mt-4 text-center">Loading Similiar Movies...</p>
+          )}
+          {similarMovies.length == 0 && !loadingSimilarMovies && (
+            <p className="mt-4 text-center">Couldn't find similar movies :(</p>
+          )}
+          {similarMovies.length > 0 && !loadingSimilarMovies && (
+            <div className="mt-4">
+              <h3 className="mb-4 text-xl font-bold">More like this:</h3>
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                {similarMovies
+                  .filter((item) => item.backdrop_path)
+                  .slice(0, 12)
+                  .map((movie) => (
+                    <SimilarMoviesCard
+                      key={movie.id}
+                      id={movie.id}
+                      duration={randomDuration()}
+                      title={movie.title}
+                      description={movie.overview}
+                      imageUrl={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
+                    />
+                  ))}
               </div>
-            )
-          }
+            </div>
+          )}
         </div>
       </div>
     </div>

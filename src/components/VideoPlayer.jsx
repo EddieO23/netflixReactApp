@@ -19,7 +19,7 @@ const VideoPlayer = ({ videoId, isMuted }) => {
       <ReactPlayer
         ref={playerRef}
         url={`https://www.youtube.com/embed/${videoId}`}
-        controls={false}
+        controls={location.pathname.startsWith("/watch") ? true : false}
         muted={isMuted}
         playing={true}
         volume={volume}
